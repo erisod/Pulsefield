@@ -11,6 +11,18 @@ import processing.core.PImage;
 
 class VisualizerParticleSystem extends Visualizer {
 	ParticleSystem universe;
+
+	OSCSettingValue oscParticlesMax = Tracker.theTracker.oscHub.registerValue("/video/particlefield/maxparticles");
+	OSCSettingValue oscParticlesMaxLife = Tracker.theTracker.oscHub.registerValue("/video/particlefield/particlemaxlife");
+	OSCSettingValue oscParticlesScale = Tracker.theTracker.oscHub.registerValue("/video/particlefield/particlescale");
+	OSCSettingValue oscParticlesRotation = Tracker.theTracker.oscHub.registerValue("/video/particlefield/particlerotation");
+	OSCSettingValue oscParticlesPersonForce = Tracker.theTracker.oscHub.registerValue("/video/particlefield/persongravity");
+	OSCSettingValue oscParticlesForceRotation = Tracker.theTracker.oscHub.registerValue("/video/particlefield/forcerotation");
+	OSCSettingValue oscParticlesDispersion = Tracker.theTracker.oscHub.registerValue("/video/particlefield/particledispersion");
+	OSCSettingValue oscParticlesOpacity = Tracker.theTracker.oscHub.registerValue("/video/particlefield/particleopacity");
+	OSCSettingXYPad oscParticlesTilt = Tracker.theTracker.oscHub.registerXYPad("/video/particlefield/tilt");
+	OSCSettingMultiButton oscModes = Tracker.theTracker.oscHub.registerMultiButton("/video/particlefield/blendmode");
+
 	String oscName = "particlefield";
 
 	HashMap<String, PImage> textures;

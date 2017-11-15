@@ -9,8 +9,9 @@ import processing.core.PVector;
 public class VisualizerRainbow extends VisualizerParticleSystem {
 	private float rainbowPositionDegrees = 0.0f;
 	private float rainbowAdvance = 0.0f;
-	float rainbowAdvanceIncrement = 0.1f; // rotation of the colors positions
-											// per update.
+	float rainbowAdvanceIncrement = 0.1f; // rotation of the colors positions per update.
+
+	OSCSettingValue oscRainbowRadius = Tracker.theTracker.oscHub.registerValue("/oschub/rainbow/radius");
 
 	VisualizerRainbow(PApplet parent) {
 		super(parent);
@@ -33,7 +34,6 @@ public class VisualizerRainbow extends VisualizerParticleSystem {
 	@Override
 	public void start() {
 		super.start();
-
 
 		Ableton.getInstance().setTrackSet("Osmos");
 
@@ -59,7 +59,7 @@ public class VisualizerRainbow extends VisualizerParticleSystem {
 	public void update(PApplet parent, People p) {
 		int particlesPerUpdate = 360;
 		rainbowAdvance = (rainbowAdvance + rainbowAdvanceIncrement) % 360;
-		
+
 		// Create some particles unless there are too many already.
 		if (universe.particlesRemaining() >= 360) {
 			for (int i = 0; i < particlesPerUpdate; i++) {
@@ -67,7 +67,7 @@ public class VisualizerRainbow extends VisualizerParticleSystem {
 				int color = Color.HSBtoRGB((rainbowPositionDegrees + rainbowAdvance) / 360.0f, 1.0f, 1.0f);
 
 				spewParticle(universe, color, (rainbowPositionDegrees / 360.0f) * 2 * (float) Math.PI, 0.0f, 0.0f,
-						Tracker.getFloorDimensionMin() / 4, Tracker.getFloorCenter());
+						oscRainbowRadius.getValue() * (Tracker.getFloorDimensionMin() / 4), Tracker.getFloorCenter());
 			}
 		}
 

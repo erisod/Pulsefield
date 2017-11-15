@@ -64,6 +64,7 @@ public class Tracker extends PApplet {
 	boolean useMAX;
 	Synth synth;
 	TouchOSC touchOSC;
+	OSCHub oscHub;
 	OFOSC oFOSC;
 	int mouseID;
 	String configFile;
@@ -158,6 +159,7 @@ public class Tracker extends PApplet {
 		logger.config("AL at "+config.getHost("AL")+":"+config.getPort("AL"));
 		MAX = new NetAddress(config.getHost("MAX"), config.getPort("MAX"));
 		touchOSC = new TouchOSC(oscP5, TO);
+		oscHub = new OSCHub(touchOSC);
 		oFOSC = new OFOSC(oscP5,OF);
 		ableton = new Ableton(oscP5, AL);
 		LEDs.theLEDs=new LEDs(AR.address(),AR.port());
@@ -843,13 +845,18 @@ public class Tracker extends PApplet {
 
 	/* incoming osc message are forwarded to the oscEvent method. */
 	synchronized public void oscEvent(OscMessage theOscMessage) {
+
+
+
 		try {
 		//logger.fine("Got message:"+theOscMessage.toString());
 		if (starting)
 			return;
-		if (theOscMessage.isPlugged() == true) 
+		if (theOscMessage.isPlugged() == true)
 			; // Handled elsewhere
-		else if (theOscMessage.addrPattern().startsWith("/video/app/buttons") == true)
+		else if (theOscMessage.addrPattern().startsWith("/oschub/")) {
+			oscHub.handleMessage(theOscMessage);
+		} else if (theOscMessage.addrPattern().startsWith("/video/app/buttons") == true)
 			vsetapp(theOscMessage);
 		else if (theOscMessage.addrPattern().startsWith("/grid")) {
 			visAbleton.handleMessage(theOscMessage);
