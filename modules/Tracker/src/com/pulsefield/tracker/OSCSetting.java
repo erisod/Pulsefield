@@ -20,7 +20,7 @@ abstract class OSCSetting {
 	String name;
 	String path;
 	OSCType type;
-	// TODO: List of callbacks on change.
+	// TODO: List of callbacks on change ?
 
 	OSCHub hub = OSCHub.getInstance();
 
@@ -178,6 +178,14 @@ class OSCSettingValue extends OSCSetting {
 		return value;
 	}
 
+	public int getValueInt() {
+		return (int) value;
+	}
+
+	public void setValue(int v) {
+		setValue((float) v);
+	}
+
 	@Override
 	public void handle(OscMessage msg) {
 		setValue(msg.get(0).floatValue());
@@ -236,13 +244,13 @@ class OSCSettingLabel extends OSCSetting {
 	}
 }
 
-class xy {
-	float x;
-	float y;
-}
-
 class OSCSettingXYPad extends OSCSetting {
 	xy value = new xy();
+
+	public static class xy {
+		float x;
+		float y;
+	}
 
 	public xy getValue() {
 		return value;

@@ -13,25 +13,222 @@ import processing.opengl.PGL;
 
 
 class ParticleSystemSettings {
-	float particleRandomDriftAccel = 0.02f / 300;
-	float forceRotation = 0.0f;
-	float particleRotation = 0.0f;
-	int particleMaxLife = 500;
+	protected float particleRandomDriftAccel = 0.02f / 300;
+	protected float forceRotation = 0.0f;
+	protected float particleRotation = 0.0f;
+	protected int particleMaxLife = 500;
 	
 	// blendMode can be -1 (for custom) or PGraphics.BLEND, .ADD, .SUBTRACT, etc.
-	int blendMode = -1; 
-	float personForce = 0.005f;
-	float particleScale = 1.0f;
+	protected int blendMode = -1;
+	protected float personForce = 0.005f;
+	protected float particleScale = 1.0f;
 
-	float fadeDeath = 0.1f;
-	float startOpacity = 1.0f;
+	protected float fadeDeath = 0.1f;
+	protected float startOpacity = 1.0f;
 
 	// Net force up/down/left/right.
-	float tiltx = 0.0f;
-	float tilty = 0.0f;
+	protected float tiltx = 0.0f;
+	protected float tilty = 0.0f;
 
 	// maxParticles is the hard upper limit on number of particles.
-	long maxParticles = 50000;
+	protected long maxParticles = 50000;
+	
+	public float getParticleRandomDriftAccel() {
+		return particleRandomDriftAccel;
+	}
+
+	public void setParticleRandomDriftAccel(float particleRandomDriftAccel) {
+		this.particleRandomDriftAccel = particleRandomDriftAccel;
+	}
+
+	public float getForceRotation() {
+		return forceRotation;
+	}
+
+	public void setForceRotation(float forceRotation) {
+		this.forceRotation = forceRotation;
+	}
+
+	public float getParticleRotation() {
+		return particleRotation;
+	}
+
+	public void setParticleRotation(float particleRotation) {
+		this.particleRotation = particleRotation;
+	}
+
+	public int getParticleMaxLife() {
+		return particleMaxLife;
+	}
+
+	public void setParticleMaxLife(int particleMaxLife) {
+		this.particleMaxLife = particleMaxLife;
+	}
+
+	public int getBlendMode() {
+		return blendMode;
+	}
+
+	public void setBlendMode(int blendMode) {
+		this.blendMode = blendMode;
+	}
+
+	public float getPersonForce() {
+		return personForce;
+	}
+
+	public void setPersonForce(float personForce) {
+		this.personForce = personForce;
+	}
+
+	public float getParticleScale() {
+		return particleScale;
+	}
+
+	public void setParticleScale(float particleScale) {
+		this.particleScale = particleScale;
+	}
+
+	public float getFadeDeath() {
+		return fadeDeath;
+	}
+
+	public void setFadeDeath(float fadeDeath) {
+		this.fadeDeath = fadeDeath;
+	}
+
+	public float getStartOpacity() {
+		return startOpacity;
+	}
+
+	public void setStartOpacity(float startOpacity) {
+		this.startOpacity = startOpacity;
+	}
+
+	public float getTiltx() {
+		return tiltx;
+	}
+
+	public void setTiltx(float tiltx) {
+		this.tiltx = tiltx;
+	}
+
+	public float getTilty() {
+		return tilty;
+	}
+
+	public void setTilty(float tilty) {
+		this.tilty = tilty;
+	}
+
+	public long getMaxParticles() {
+		return maxParticles;
+	}
+
+	public void setMaxParticles(long maxParticles) {
+		this.maxParticles = maxParticles;
+	}
+}
+
+class ParticleSystemSettingsOSC extends ParticleSystemSettings {
+	OSCSettingValue oscParticlesMax = Tracker.theTracker.oscHub.registerValue("/video/particlefield/maxparticles");
+	OSCSettingValue oscParticlesMaxLife = Tracker.theTracker.oscHub.registerValue("/video/particlefield/particlemaxlife");
+	OSCSettingValue oscParticlesScale = Tracker.theTracker.oscHub.registerValue("/video/particlefield/particlescale");
+	OSCSettingValue oscParticlesRotation = Tracker.theTracker.oscHub.registerValue("/video/particlefield/particlerotation");
+	OSCSettingValue oscParticlesPersonForce = Tracker.theTracker.oscHub.registerValue("/video/particlefield/persongravity");
+	OSCSettingValue oscParticlesForceRotation = Tracker.theTracker.oscHub.registerValue("/video/particlefield/forcerotation");
+	OSCSettingValue oscParticlesDispersion = Tracker.theTracker.oscHub.registerValue("/video/particlefield/particledispersion");
+	OSCSettingValue oscParticlesOpacity = Tracker.theTracker.oscHub.registerValue("/video/particlefield/particleopacity");
+	OSCSettingXYPad oscParticlesTilt = Tracker.theTracker.oscHub.registerXYPad("/video/particlefield/tilt");
+	OSCSettingMultiButton oscModes = Tracker.theTracker.oscHub.registerMultiButton("/video/particlefield/blendmode");
+
+	public float getParticleRandomDriftAccel() {
+		return oscParticlesDispersion.getValue();
+	}
+
+	public void setParticleRandomDriftAccel(float particleRandomDriftAccel) {
+		oscParticlesDispersion.setValue(particleRandomDriftAccel);
+	}
+
+	public float getForceRotation() {
+		return oscParticlesForceRotation.getValue();
+	}
+
+	public void setForceRotation(float forceRotation) {
+		oscParticlesForceRotation.setValue(forceRotation);
+	}
+
+	public float getParticleRotation() {
+		return oscParticlesRotation.getValue();
+	}
+
+	public void setParticleRotation(float particleRotation) {
+		oscParticlesRotation.setValue(particleRotation);
+	}
+
+	public int getParticleMaxLife() {
+		return oscParticlesMaxLife.getValueInt();
+	}
+
+	public void setParticleMaxLife(int particleMaxLife) {
+		oscParticlesMaxLife.setValue(particleMaxLife);
+	}
+
+	public int getBlendMode() {
+		// TODO
+		xxx 
+		return blendMode;
+	}
+
+	public void setBlendMode(int blendMode) {
+		this.blendMode = blendMode;
+	}
+
+	public float getPersonForce() {
+		return oscParticlesPersonForce.getValue();
+	}
+
+	public void setPersonForce(float personForce) {
+		oscParticlesPersonForce.setValue(personForce);
+	}
+
+	public float getParticleScale() {
+		return oscParticlesScale.getValue();
+	}
+
+	public void setParticleScale(float particleScale) {
+		oscParticlesScale.setValue(particleScale);
+	}
+
+	public float getTiltx() {
+		return oscParticlesTilt.getValue().x;
+	}
+
+	public void setTiltx(float tiltx) {
+		OSCSettingXYPad.xy setting = oscParticlesTilt.getValue();
+		setting.x = tiltx;
+
+		oscParticlesTilt.setValue(setting);
+	}
+
+	public float getTilty() {
+		return oscParticlesTilt.getValue().y;
+	}
+
+	public void setTilty(float tilty) {
+		OSCSettingXYPad.xy setting = oscParticlesTilt.getValue();
+		setting.y = tilty;
+
+		oscParticlesTilt.setValue(setting);
+	}
+
+	public long getMaxParticles() {
+		return oscParticlesMax.getValueInt();
+	}
+
+	public void setMaxParticles(long maxParticles) {
+		oscParticlesMax.setValue(maxParticles);
+	}
 }
 
 

@@ -12,18 +12,7 @@ import processing.core.PImage;
 class VisualizerParticleSystem extends Visualizer {
 	ParticleSystem universe;
 
-	OSCSettingValue oscParticlesMax = Tracker.theTracker.oscHub.registerValue("/video/particlefield/maxparticles");
-	OSCSettingValue oscParticlesMaxLife = Tracker.theTracker.oscHub.registerValue("/video/particlefield/particlemaxlife");
-	OSCSettingValue oscParticlesScale = Tracker.theTracker.oscHub.registerValue("/video/particlefield/particlescale");
-	OSCSettingValue oscParticlesRotation = Tracker.theTracker.oscHub.registerValue("/video/particlefield/particlerotation");
-	OSCSettingValue oscParticlesPersonForce = Tracker.theTracker.oscHub.registerValue("/video/particlefield/persongravity");
-	OSCSettingValue oscParticlesForceRotation = Tracker.theTracker.oscHub.registerValue("/video/particlefield/forcerotation");
-	OSCSettingValue oscParticlesDispersion = Tracker.theTracker.oscHub.registerValue("/video/particlefield/particledispersion");
-	OSCSettingValue oscParticlesOpacity = Tracker.theTracker.oscHub.registerValue("/video/particlefield/particleopacity");
-	OSCSettingXYPad oscParticlesTilt = Tracker.theTracker.oscHub.registerXYPad("/video/particlefield/tilt");
-	OSCSettingMultiButton oscModes = Tracker.theTracker.oscHub.registerMultiButton("/video/particlefield/blendmode");
-
-	String oscName = "particlefield";
+	// String oscName = "particlefield";
 
 	HashMap<String, PImage> textures;
 
@@ -60,7 +49,7 @@ class VisualizerParticleSystem extends Visualizer {
 		setUniverseDefaults();
 
 		Laser.getInstance().setFlag("body", 0.0f);
-		setTO();
+		// setTO();
 	}
 	
 	// TODO: Make this virtual ?   This is for subclasses to specify their defaults.
@@ -102,18 +91,19 @@ class VisualizerParticleSystem extends Visualizer {
 		}
 	}
 
+	/*
 	@Override
 	public void handleMessage(OscMessage msg) {
 		if (universe == null)
 			universe = new ParticleSystem();
-
+	
 		logger.fine("Particle message: " + msg.toString());
-
+	
 		String pattern = msg.addrPattern();
 		String components[] = pattern.split("/");
 		PApplet.println("ParticleField OSC Message (" + components.length + " len) " + msg.toString() + " : "
 				+ msg.get(0).floatValue());
-
+	
 		if (components.length < 3 || !components[2].equals(oscName))
 			logger.warning("VisualizerParticleSystem: Expected /video/" + oscName + " messages, got " + msg.toString());
 		else if (components.length == 4 && components[3].equals("maxparticles")) {
@@ -138,20 +128,13 @@ class VisualizerParticleSystem extends Visualizer {
 			handleTilt(msg);
 		} else
 			logger.warning("Unknown " + oscName + " Message: " + msg.toString());
-
+	
 		setTO();
 	}
-
-	private void handleTilt(OscMessage msg) {
-		msg.addrPattern().split("/");
-
-		universe.settings.tiltx = msg.get(0).floatValue() * 0.0001f;
-		universe.settings.tilty = msg.get(1).floatValue() * 0.0001f;
-	}
-
+	
 	private void handleBlendSettingMessage(OscMessage msg) {
 		String components[] = msg.addrPattern().split("/");
-
+	
 		if (components.length < 5) {
 			logger.warning("handleBlendSettingMessage: Expected more components in " + msg.toString());
 		} else {
@@ -160,7 +143,7 @@ class VisualizerParticleSystem extends Visualizer {
 				return;
 			}
 			String clicked = components[4].toString() + "/" + components[5].toString();
-
+	
 			switch (clicked) {
 			case "2/1":
 				universe.settings.blendMode = -1; // Custom.
@@ -189,36 +172,6 @@ class VisualizerParticleSystem extends Visualizer {
 			}
 		}
 	}
-
-	private void setTOValue(String name, double value, String fmt) {
-		TouchOSC to = TouchOSC.getInstance();
-		OscMessage set = new OscMessage("/video/" + oscName + "/" + name);
-		set.add(value);
-		to.sendMessage(set);
-		set = new OscMessage("/video/" + oscName + "/" + name + "/value");
-		set.add(String.format(fmt, value));
-		to.sendMessage(set);
-	}
-
-	public void setTO() {
-		setTOValue("maxparticles", Math.log(universe.settings.maxParticles) / Math.log(2), "%.4f");
-		setTOValue("particleaccel", universe.settings.particleRandomDriftAccel, "%.4f");
-		setTOValue("forcerotation", universe.settings.forceRotation, "%.4f");
-		setTOValue("particlerotation", universe.settings.particleRotation, "%.4f");
-		setTOValue("particlemaxlife", universe.settings.particleMaxLife, "%.4f");
-		setTOValue("particleopacity", universe.settings.startOpacity, "%.4f");
-		setTOValue("persongravity", universe.settings.personForce, "%.4f");
-		setTOValue("particlescale", universe.settings.particleScale, "%.4f");
-
-		setTiltTO();
-	}
-
-	public void setTiltTO() {
-		TouchOSC to = TouchOSC.getInstance();
-		OscMessage set = new OscMessage("/video/" + oscName + "/tilt");
-		set.add("set");
-		set.add(universe.settings.tiltx);
-		set.add(universe.settings.tilty);
-		to.sendMessage(set);
-	}
+	
+	*/
 }
